@@ -1,0 +1,12 @@
+<span class="section-title">Categories:</span>
+<div class="cat-container">
+  <a
+    *ngFor="let cat of categories"
+    (click)="onCategorySelect(cat)"
+    [ngClass]="{
+      'cat-item': true,
+      'cat-item--selected': cat === (currentCategory$ | async)
+    }"
+    >{{ cat | titlecase }}</a
+  >
+</div>
