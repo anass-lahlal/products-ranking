@@ -4,7 +4,15 @@ import { Table } from "./table.model";
 export type Action = TableActions.All;
 
 const initialState: Table = {
-  columns: ["rank", "name", "averageRanking", "presenceRate", "peek", "trend"],
+  columns: [
+    "rank",
+    "name",
+    "daysTrending",
+    "averageRanking",
+    "presenceRate",
+    "top",
+    "trend",
+  ],
   data: [],
   pagination: {
     page: 0,
@@ -19,20 +27,24 @@ const initialState: Table = {
 
 export function tableReducer(state: Table = initialState, action: Action) {
   switch (action.type) {
-    case TableActions.ADD_COLUMN:
+    case TableActions.TOGGLE_COLUMN:
+      const columnIndex = state.columns.indexOf(action.payload);
+      if (columnIndex !== -1) {
+        //remove column
+        return {
+          ...state,
+          columns: [
+            ...state.columns.slice(0, columnIndex),
+            ...state.columns.slice(columnIndex + 1, state.columns.length),
+          ],
+        };
+      }
+      //add column
       return {
         ...state,
         columns: [...state.columns, action.payload],
       };
-    case TableActions.REMOVE_COLUMN:
-      const columnIndex = state.columns.indexOf(action.payload);
-      return {
-        ...state,
-        columns: [
-          ...state.columns.slice(0, columnIndex),
-          ...state.columns.slice(columnIndex + 1, state.columns.length),
-        ],
-      };
+
     case TableActions.UPDATE_TABLE_DATA:
       return {
         ...state,
@@ -91,7 +103,8 @@ export function tableReducer(state: Table = initialState, action: Action) {
         ...state,
         sort: {
           orderBy: action.payload,
-          order: state.sort.orderBy === action.payload ? +!state.sort.order : 1,
+          order:
+            state.sort.orderBy === action.payload ? state.sort.order * -1 : 1,
         },
       };
 

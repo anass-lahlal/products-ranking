@@ -1,8 +1,7 @@
 import { Action } from "@ngrx/store";
 import { Table, Column } from "./table.model";
 
-export const ADD_COLUMN = "[Table] Add Column";
-export const REMOVE_COLUMN = "[Table] Remove Column";
+export const TOGGLE_COLUMN = "[Table] Toggle COlumn";
 
 export const UPDATE_TABLE_DATA = "[Table] Update Data";
 
@@ -14,13 +13,8 @@ export const UPDATE_ROWS_COUNT = "[Table] Update Rows Per Page";
 
 export const SET_SORT_VALUE = "[Table] Set Sort Value";
 
-export class AddColumn implements Action {
-  readonly type = ADD_COLUMN;
-  constructor(public payload: Column) {}
-}
-
-export class removeColumn implements Action {
-  readonly type = REMOVE_COLUMN;
+export class toggleColumn implements Action {
+  readonly type = TOGGLE_COLUMN;
   constructor(public payload: Column) {}
 }
 
@@ -56,8 +50,7 @@ export class setSortValue implements Action {
 }
 
 export type All =
-  | AddColumn
-  | removeColumn
+  | toggleColumn
   | updateTableData
   | getFirstPage
   | getLastPage

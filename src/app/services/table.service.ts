@@ -27,12 +27,8 @@ export class TableService {
     return this.store.select((state) => state.table.sort);
   }
 
-  addColumn(column: Column) {
-    this.store.dispatch(new tableActions.AddColumn(column));
-  }
-
-  removeColumn(column: Column) {
-    this.store.dispatch(new tableActions.removeColumn(column));
+  toggleColumn(column: Column) {
+    this.store.dispatch(new tableActions.toggleColumn(column));
   }
 
   updateTableData(data: any[]) {

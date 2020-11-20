@@ -1,7 +1,5 @@
 import { Component } from "@angular/core";
-import { Column } from "./models/Column";
 import { Product } from "./models/Product";
-import { Row } from "./models/Row";
 import { CategoryService } from "./services/category.service";
 import { TableService } from "./services/table.service";
 
@@ -11,9 +9,6 @@ import { TableService } from "./services/table.service";
   styleUrls: ["./app.component.css"],
 })
 export class AppComponent {
-  columns: Column[] = [];
-  rows: Row[] = [];
-
   constructor(
     private categoryService: CategoryService,
     private tableService: TableService
@@ -27,27 +22,6 @@ export class AppComponent {
     let data = this.categoryService.getCategoryData(category).default;
 
     this.buildData(data);
-  }
-
-  buildColumns() {
-    return [
-      {
-        accessor: "ASIN",
-        title: "ASIN",
-      },
-      {
-        accessor: "name",
-        title: "Name",
-      },
-      {
-        accessor: "averageRank",
-        title: "Avg. Rank",
-      },
-      {
-        accessor: "presenceRate",
-        title: "Presence Rate",
-      },
-    ];
   }
 
   buildData(data: Product[]) {

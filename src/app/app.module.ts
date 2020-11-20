@@ -16,6 +16,7 @@ import { categoriesReducer } from "./state/categories/categoris.reducers";
 import { tableReducer } from "./state/table/table.reducers";
 import { TableService } from "./services/table.service";
 import { CategoryService } from "./services/category.service";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { CategoryService } from "./services/category.service";
       category: categoriesReducer,
       table: tableReducer,
     }),
+    FontAwesomeModule,
   ],
   providers: [TableService, CategoryService],
   bootstrap: [AppComponent],

@@ -8,10 +8,11 @@ export interface Table {
 const columns = [
   "rank",
   "name",
-  "peek",
+  "top",
   "averageRanking",
   "presenceRate",
   "trend",
+  "daysTrending",
 ] as const;
 
 export type Column = typeof columns[number];
@@ -24,5 +25,5 @@ export interface Pagination {
 
 export interface Sort {
   orderBy: string;
-  order: 1 | 0;
+  order: 1 | -1;
 }
