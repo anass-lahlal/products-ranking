@@ -7,13 +7,14 @@
 
 .cat-item {
   padding: 13px 15px;
-  background: #021b57;
-  color: #ffffff;
+  background: #f4f4f4;
+  color: #344072;
   min-width: 120px;
   text-align: center;
   font-size: 13px;
-  border-right: 1px solid #244671;
+  border-right: 1px solid #c4c4c4;
   cursor: pointer;
+  text-transform: uppercase;
 }
 
 .cat-item:first-child {
@@ -28,7 +29,7 @@
 }
 
 .cat-item--selected {
-  color: #ac7b3c;
+  color: #01b1e6;
   cursor: default;
   font-weight: 500;
 }

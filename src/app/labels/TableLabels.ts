@@ -1,15 +1,3 @@
-import { map, invert } from "lodash";
-
-export const ColumnTitles = {
-  name: "Name",
-  rank: "Rank",
-  top: "Peak",
-  averageRanking: "Avg. Ranking",
-  presenceRate: "Presence Rate(%)",
-  trend: "Trend",
-  daysTrending: "Days Trending",
-};
-
 export const ColumnsArray = [
   {
     title: "Rank",
@@ -38,5 +26,48 @@ export const ColumnsArray = [
   {
     title: "Trend",
     value: "trend",
+  },
+];
+
+export const ColumnConfig = [
+  {
+    title: "Name",
+    accessor: "name",
+    sortable: true,
+    minWidth: 200,
+  },
+  {
+    title: "Rank",
+    accessor: "rank",
+    sortable: true,
+  },
+  {
+    title: "Peak",
+    accessor: "top",
+    sortable: true,
+  },
+  {
+    title: "Avg. Ranking",
+    accessor: "averageRanking",
+    sortable: true,
+    minWidth: 130,
+  },
+  {
+    title: "Presence Rate(%)",
+    accessor: "presenceRate",
+    sortable: true,
+    minWidth: 140,
+  },
+  {
+    title: "Trend",
+    accessor: "trend",
+    sortable: true,
+    minWidth: 150,
+  },
+  {
+    title: "Days Trending",
+    accessor: "daysTrending",
+    sortable: true,
+    minWidth: 130,
   },
 ];

@@ -1,0 +1,157 @@
+.columns-contaier {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin: 15px 0;
+}
+
+.column-filter {
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 19px;
+  background: #f4f4f4;
+  border-radius: 16px;
+  text-transform: uppercase;
+  transition: background 0.2s;
+  padding: 7px 15px 6px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.column-filter-active .column-filter-icon {
+  margin-left: 7px;
+}
+
+.column-filter-inactive {
+  opacity: 0.6;
+}
+
+.column-filter-inactive .column-filter-icon {
+  margin-right: 7px;
+}
+
+.table {
+  margin: 10px -20px 0;
+}
+
+.table-row-head {
+  border-bottom: 1px solid #dfe1ea;
+}
+
+.table-head {
+  padding: 16px 5px;
+  cursor: default;
+}
+
+.table-col-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  border: none;
+  color: #8086a0;
+  font-weight: 600;
+}
+
+.table-col-title-icon {
+  color: #8086a0;
+  margin-left: 5px;
+  font-size: 12px;
+}
+
+.table-row {
+  border-bottom: 1px solid #dfe1ea;
+}
+
+.table-row > td {
+  padding: 10px;
+  position: relative;
+  height: 100px;
+}
+
+.table-cell-rank {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.table-cell-rank-text {
+  color: #344072;
+  font-size: 32px;
+  line-height: 43px;
+}
+
+.table-cell-rank-icon {
+  font-size: 11px;
+  color: #8086a0;
+}
+
+.table-cell-rank-icon--up {
+  color: #4edcb1;
+}
+
+.table-cell-rank-icon--down {
+  color: #fe3580;
+}
+
+.table-cell-rank-new {
+  font-size: 11px;
+  font-weight: 600;
+  color: #ffaa36;
+}
+
+.table-cell-percentage {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.table-cell-percentage-sign {
+  font-size: 13px;
+  color: #344072;
+  font-weight: 600;
+  position: relative;
+  top: 5px;
+  margin-left: 3px;
+}
+
+.table-cell-graph {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.table-cell-graph path {
+  stroke-width: 2px;
+  fill: none;
+}
+
+.table-cell-graph.increase path {
+  stroke: #4edcb1;
+}
+
+.table-cell-graph.decrease path {
+  stroke: #fe3580;
+}
+
+.table-cell-graph.stable path {
+  stroke: #8086a0;
+}
+
+.table-cell-name-container {
+  width: 100%;
+  text-align: left;
+}
+
+.table-cell-name {
+  font-size: 12px;
+  line-height: 1.2;
+}

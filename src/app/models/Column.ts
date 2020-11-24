@@ -3,5 +3,6 @@ export interface TableColumn {
   accessor: string;
   maxWidth?: number;
   minWidth?: number;
+  background?: number;
   sortable?: boolean;
 }

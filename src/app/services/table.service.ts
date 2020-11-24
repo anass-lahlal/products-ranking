@@ -16,7 +16,7 @@ export class TableService {
   }
 
   getTableData(): Observable<any[]> {
-    return this.store.select((state) => state.table.data);
+    return this.store.select((state) => state.table.tableData);
   }
 
   getPagination(): Observable<Pagination> {

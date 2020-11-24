@@ -11,50 +11,121 @@
     }"
     (click)="toggleColumn(col.value)"
   >
-    <span
-      style="padding-right: 5px"
+    <fa-icon
+      class="column-filter-icon"
+      [icon]="faPlus"
       *ngIf="(columnFilterArray$ | async).indexOf(col.value) === -1"
-      >+</span
-    >
+    ></fa-icon>
     {{ col.title }}
-    <span
-      style="padding-left: 5px"
+    <fa-icon
+      class="column-filter-icon"
+      [icon]="faTimes"
       *ngIf="(columnFilterArray$ | async).indexOf(col.value) > -1"
-      >x</span
-    >
+    ></fa-icon>
   </div>
 </div>
-<table>
+<table class="table">
   <thead>
-    <tr>
-      <th *ngFor="let column of tableColumns" (click)="onSort(column.accessor)">
+    <tr class="table-row-head">
+      <th
+        class="table-head"
+        *ngFor="let column of tableColumns"
+        (click)="column.sortable && onSort(column.accessor)"
+        [ngStyle]="getTableHeadStyles(column)"
+      >
         <div>
-          <span>{{ column.title }}</span>
+          <span class="table-col-title">{{ column.title }}</span>
           <ng-template [ngIf]="column.sortable">
-            <small
-              style="padding-left: 5px"
+            <fa-icon
+              class="table-col-title-icon"
+              [icon]="faSort"
               *ngIf="column.accessor !== (sortObject$ | async).orderBy"
-              >s</small
-            >
-            <small
-              style="padding-left: 5px"
+            ></fa-icon>
+            <fa-icon
+              class="table-col-title-icon"
+              [icon]="faSortUp"
               *ngIf="
                 (sortObject$ | async).order === 1 &&
                 (sortObject$ | async).orderBy === column.accessor
               "
-              >asc</small
-            >
-            <small
-              style="padding-left: 5px"
+            ></fa-icon>
+            <fa-icon
+              class="table-col-title-icon"
+              [icon]="faSortDown"
               *ngIf="
                 (sortObject$ | async).order === -1 &&
                 (sortObject$ | async).orderBy === column.accessor
               "
-              >desc</small
-            >
+            ></fa-icon>
           </ng-template>
         </div>
       </th>
     </tr>
   </thead>
+  <tbody>
+    <tr *ngFor="let row of tableData$ | async" class="table-row">
+      <td *ngIf="(columnFilterArray$ | async).indexOf('rank') > -1">
+        <div class="table-cell-rank">
+          <span class="table-cell-rank-text">{{ row.currentRank }}</span>
+          <span
+            class="table-cell-rank-new"
+            *ngIf="row.isNew; else notNewTemplate"
+            >New</span
+          >
+          <ng-template #notNewTemplate>
+            <fa-icon
+              [ngClass]="getRankIconClass(row.ranks)"
+              [icon]="getRankIcon(row.ranks)"
+            ></fa-icon>
+          </ng-template>
+        </div>
+      </td>
+      <td *ngIf="(columnFilterArray$ | async).indexOf('name') > -1">
+        <div class="table-cell-name-container">
+          <span class="table-cell-name" title="{{ row.Name }}">{{
+            getTruncateName(row.Name)
+          }}</span>
+        </div>
+      </td>
+      <td *ngIf="(columnFilterArray$ | async).indexOf('daysTrending') > -1">
+        <div class="table-cell-rank">
+          <span class="table-cell-rank-text">{{ row.dates.length }}</span>
+        </div>
+      </td>
+      <td
+        *ngIf="(columnFilterArray$ | async).indexOf('averageRanking') > -1"
+        class="table-cell"
+      >
+        <div class="table-cell-rank">
+          <span class="table-cell-rank-text">{{
+            roundValue(row.averageRank)
+          }}</span>
+        </div>
+      </td>
+      <td *ngIf="(columnFilterArray$ | async).indexOf('presenceRate') > -1">
+        <div class="table-cell-percentage">
+          <span class="table-cell-rank-text">{{
+            floorValue(row.presenceRate)
+          }}</span>
+          <small class="table-cell-percentage-sign">%</small>
+        </div>
+      </td>
+      <td *ngIf="(columnFilterArray$ | async).indexOf('top') > -1">
+        <div class="table-cell-rank">
+          <span class="table-cell-rank-text">{{ row.peek }}</span>
+        </div>
+      </td>
+      <td *ngIf="(columnFilterArray$ | async).indexOf('trend') > -1">
+        <svg:svg
+          class="table-cell-graph {{ getPathState(row.ranks) }}"
+          xmlns="http://www.w3.org/2000/svg"
+          [attr.viewBox]="getViewBox()"
+          [attr.width]="140"
+          [attr.height]="80"
+        >
+          <path [attr.d]="generateTrendGraph(row.ranks)" />
+        </svg:svg>
+      </td>
+    </tr>
+  </tbody>
 </table>

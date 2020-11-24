@@ -64,20 +64,23 @@ export class AppComponent {
         (rank) => rank <= presenceRateRankThreshold
       ).length;
       let averageRank = totalRanking / productData.ranks.length;
-      //push data to new array
-      transformedData.push({
-        ASIN: keys[i],
-        Name: productData.name,
-        averageRank,
-        presenceRate: (top10Days / 30) * 100,
-        peek: Math.max(...productData.ranks),
-        rankCount: productData.ranks.length,
-        currentRank: productData.currentRank,
-        isNew:
-          productData.ranks.length === 1 && productData.dates[0] === currentDay,
-        ranks: productData.ranks,
-        dates: productData.dates,
-      });
+
+      if (productData.currentRank !== 0)
+        //push data to new array
+        transformedData.push({
+          ASIN: keys[i],
+          Name: productData.name,
+          averageRank,
+          presenceRate: (top10Days / 30) * 100,
+          peek: Math.min(...productData.ranks),
+          rankCount: productData.ranks.length,
+          currentRank: productData.currentRank,
+          isNew:
+            productData.ranks.length === 1 &&
+            productData.dates[0] === currentDay,
+          ranks: productData.ranks,
+          dates: productData.dates,
+        });
     }
 
     //update store data

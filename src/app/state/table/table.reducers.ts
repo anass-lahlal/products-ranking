@@ -3,6 +3,94 @@ import { Table } from "./table.model";
 
 export type Action = TableActions.All;
 
+/**
+ * Sort active columns to keep consistency in table
+ * @param stateColumns array of active columns
+ */
+function sortColumns(stateColumns) {
+  const columns = initialState.columns;
+
+  //build index array of state columns
+  let indexArray = stateColumns.map((val) => columns.indexOf(val));
+
+  //sort index Array
+  indexArray.sort((a, b) => a - b);
+
+  //get column values
+  let sortedColumns = indexArray.map((index) => columns[index]);
+
+  return sortedColumns;
+}
+
+function compareFunction(a, b, order) {
+  const isString = typeof a === "string";
+  let firstValue = a,
+    secondValue = b;
+
+  if (isString) {
+    firstValue = firstValue.toUpperCase();
+    secondValue = secondValue.toUpperCase();
+  }
+
+  let comparison = 0;
+
+  if (firstValue > secondValue) {
+    comparison = 1;
+  } else if (secondValue > firstValue) {
+    comparison = -1;
+  }
+
+  //order is 1 for asc and -1 for desc
+  return comparison * order;
+}
+
+function sortTableData(data: any[], sortObject) {
+  let clonedData = [...data];
+  const getTrendSort = (ranks: number[]) => {
+    const difference = ranks[0] - ranks[ranks.length - 1];
+    if (difference > 0) return 0;
+    if (difference === 0) return 1;
+    if (difference < 0) {
+      return 2;
+    }
+  };
+  let sortFunc = null;
+  switch (sortObject.orderBy) {
+    case "rank":
+      sortFunc = (a, b) =>
+        compareFunction(a.currentRank, b.currentRank, sortObject.order);
+      break;
+    case "name":
+      sortFunc = (a, b) => compareFunction(a.Name, b.Name, sortObject.order);
+      break;
+    case "daysTrending":
+      sortFunc = (a, b) =>
+        compareFunction(a.dates.length, b.dates.length, sortObject.order);
+      break;
+    case "averageRanking":
+      sortFunc = (a, b) =>
+        compareFunction(a.averageRank, b.averageRank, sortObject.order);
+      break;
+    case "presenceRate":
+      sortFunc = (a, b) =>
+        compareFunction(a.presenceRate, b.presenceRate, sortObject.order);
+      break;
+    case "top":
+      sortFunc = (a, b) => compareFunction(a.peek, b.peek, sortObject.order);
+      break;
+    case "trend":
+      sortFunc = (a, b) =>
+        compareFunction(
+          getTrendSort(a.ranks),
+          getTrendSort(b.ranks),
+          sortObject.order
+        );
+      break;
+    default:
+      break;
+  }
+  return sortFunc ? clonedData.sort(sortFunc) : data;
+}
 const initialState: Table = {
   columns: [
     "rank",
@@ -23,6 +111,7 @@ const initialState: Table = {
     orderBy: "rank",
     order: 1,
   },
+  tableData: [],
 };
 
 export function tableReducer(state: Table = initialState, action: Action) {
@@ -42,7 +131,7 @@ export function tableReducer(state: Table = initialState, action: Action) {
       //add column
       return {
         ...state,
-        columns: [...state.columns, action.payload],
+        columns: sortColumns([...state.columns, action.payload]),
       };
 
     case TableActions.UPDATE_TABLE_DATA:
@@ -53,6 +142,8 @@ export function tableReducer(state: Table = initialState, action: Action) {
           ...state.pagination,
           page: 0,
         },
+        tableData: action.payload,
+        sort: initialState.sort,
       };
     case TableActions.GET_FIRST_PAGE:
       return {
@@ -99,13 +190,15 @@ export function tableReducer(state: Table = initialState, action: Action) {
         },
       };
     case TableActions.SET_SORT_VALUE:
+      const newSort = {
+        orderBy: action.payload,
+        order:
+          state.sort.orderBy === action.payload ? state.sort.order * -1 : 1,
+      };
       return {
         ...state,
-        sort: {
-          orderBy: action.payload,
-          order:
-            state.sort.orderBy === action.payload ? state.sort.order * -1 : 1,
-        },
+        sort: newSort,
+        tableData: sortTableData(state.data, newSort),
       };
 
     default:
