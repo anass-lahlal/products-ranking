@@ -17,6 +17,7 @@ import { tableReducer } from "./state/table/table.reducers";
 import { TableService } from "./services/table.service";
 import { CategoryService } from "./services/category.service";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { PaginationComponent } from './components/pagination/pagination.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
     CategoriesComponent,
     GraphHeaderComponent,
     CardComponent,
+    PaginationComponent,
   ],
   imports: [
     BrowserModule,

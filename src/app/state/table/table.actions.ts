@@ -9,6 +9,7 @@ export const GET_FIRST_PAGE = "[Table] Get First Page";
 export const GET_LAST_PAGE = "[Table] Get Last Page";
 export const GET_NEXT_PAGE = "[Table] Get Next Page";
 export const GET_PREV_PAGE = "[Table] Get Previous Page";
+export const GET_PAGE = "[Table] Get Page";
 export const UPDATE_ROWS_COUNT = "[Table] Update Rows Per Page";
 
 export const SET_SORT_VALUE = "[Table] Set Sort Value";
@@ -39,6 +40,11 @@ export class getPreviousPage implements Action {
   readonly type = GET_PREV_PAGE;
 }
 
+export class getPage implements Action {
+  readonly type = GET_PAGE;
+  constructor(public payload: number) {}
+}
+
 export class updateRowsCount implements Action {
   readonly type = UPDATE_ROWS_COUNT;
   constructor(public payload: number) {}
@@ -56,5 +62,6 @@ export type All =
   | getLastPage
   | getNextPage
   | getPreviousPage
+  | getPage
   | updateRowsCount
   | setSortValue;

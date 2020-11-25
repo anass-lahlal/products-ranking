@@ -33,20 +33,6 @@ export class TableComponent {
 
   columnFilterArray$: Observable<Column[]>;
   sortObject$: Observable<Sort>;
-  // tableData$ = [
-  //   {
-  //     ASIN: "AACAFG",
-  //     Name: "Product Name Long Long",
-  //     averageRank: 3,
-  //     presenceRate: 20.345,
-  //     peek: 2,
-  //     rankCount: 4,
-  //     currentRank: 3,
-  //     isNew: false,
-  //     ranks: [2, 3, 4, 5],
-  //     dates: ["12/05/2019", "12/04/2019", "12/03/2019", "12/02/2019"],
-  //   },
-  // ];
   tableData$: Observable<any[]>;
   tableColumns: TableColumn[];
   allColumns = ColumnsArray;

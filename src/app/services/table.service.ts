@@ -51,6 +51,10 @@ export class TableService {
     this.store.dispatch(new tableActions.getPreviousPage());
   }
 
+  getPage(page: number) {
+    this.store.dispatch(new tableActions.getPage(page));
+  }
+
   updateRowsCount(count: number) {
     this.store.dispatch(new tableActions.updateRowsCount(count));
   }

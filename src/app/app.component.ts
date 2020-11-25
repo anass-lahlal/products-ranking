@@ -21,10 +21,10 @@ export class AppComponent {
   getData(category) {
     let data = this.categoryService.getCategoryData(category).default;
 
-    this.buildData(data);
+    this.buildTableData(data);
   }
 
-  buildData(data: Product[]) {
+  buildTableData(data: Product[]) {
     let uniqueProducts = {};
     let transformedData = [];
     const presenceRateRankThreshold = 10;

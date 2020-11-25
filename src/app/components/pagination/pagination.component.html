@@ -1,0 +1,50 @@
+<div class="pagination-container" *ngIf="(pagination$ | async).pages > 0">
+  <div class="pagination-size">
+    <select
+      class="pagination-size-select"
+      [value]="(pagination$ | async).rowsPerPage"
+      (change)="onRowsCountChange($event.target.value)"
+    >
+      <option value="10">10</option>
+      <option value="20">20</option>
+      <option value="50">50</option>
+      <option [value]="(pagination$ | async).pages">All</option>
+    </select>
+    <fa-icon
+      class="pagination-size-select-icon"
+      [icon]="faChevronDown"
+    ></fa-icon>
+  </div>
+  <div
+    [ngClass]="{
+      'pagination-page-labeled': true,
+      'pagination-page-labeled--disabled': (pagination$ | async).page === 1
+    }"
+    (click)="onPrevPage()"
+  >
+    <fa-icon class="pagination-icon" [icon]="faChevronLeft"></fa-icon>
+    Prev
+  </div>
+  <div class="pagination-pages">
+    <span
+      [ngClass]="{
+        'pagination-page': true,
+        'pagination-page--active': page === (pagination$ | async).page
+      }"
+      *ngFor="let page of pages"
+      (click)="onPageClick(page)"
+      >{{ page }}</span
+    >
+  </div>
+  <div
+    [ngClass]="{
+      'pagination-page-labeled': true,
+      'pagination-page-labeled--disabled':
+        (pagination$ | async).page === (pagination$ | async).pages
+    }"
+    (click)="onNextPage()"
+  >
+    Next
+    <fa-icon class="pagination-icon" [icon]="faChevronRight"></fa-icon>
+  </div>
+</div>

@@ -1,5 +1,5 @@
 import * as TableActions from "./table.actions";
-import { Table } from "./table.model";
+import { Table, Pagination } from "./table.model";
 
 export type Action = TableActions.All;
 
@@ -91,6 +91,18 @@ function sortTableData(data: any[], sortObject) {
   }
   return sortFunc ? clonedData.sort(sortFunc) : data;
 }
+
+function generateInitialPagination(
+  dataLength: number,
+  oldPagination: Pagination
+): Pagination {
+  return {
+    ...oldPagination,
+    page: 1,
+    pages: Math.ceil(dataLength / oldPagination.rowsPerPage),
+  };
+}
+
 const initialState: Table = {
   columns: [
     "rank",
@@ -138,10 +150,10 @@ export function tableReducer(state: Table = initialState, action: Action) {
       return {
         ...state,
         data: action.payload,
-        pagination: {
-          ...state.pagination,
-          page: 0,
-        },
+        pagination: generateInitialPagination(
+          action.payload.length,
+          state.pagination
+        ),
         tableData: action.payload,
         sort: initialState.sort,
       };
@@ -169,7 +181,10 @@ export function tableReducer(state: Table = initialState, action: Action) {
         ...state,
         pagination: {
           ...state.pagination,
-          page: state.pagination.page + 1,
+          page:
+            state.pagination.page + 1 <= state.pagination.pages
+              ? state.pagination.page + 1
+              : state.pagination.page,
         },
       };
     case TableActions.GET_PREV_PAGE:
@@ -177,17 +192,28 @@ export function tableReducer(state: Table = initialState, action: Action) {
         ...state,
         pagination: {
           ...state.pagination,
-          page: state.pagination.page - 1,
+          page:
+            state.pagination.page - 1 >= 1
+              ? state.pagination.page - 1
+              : state.pagination.page,
+        },
+      };
+    case TableActions.GET_PAGE:
+      return {
+        ...state,
+        pagination: {
+          ...state.pagination,
+          page: action.payload,
         },
       };
 
     case TableActions.UPDATE_ROWS_COUNT:
       return {
         ...state,
-        pagination: {
+        pagination: generateInitialPagination(state.tableData.length, {
           ...state.pagination,
           rowsPerPage: action.payload,
-        },
+        }),
       };
     case TableActions.SET_SORT_VALUE:
       const newSort = {
