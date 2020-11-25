@@ -103,6 +103,12 @@ function generateInitialPagination(
   };
 }
 
+function generatePaginatedData(data: any[], pagination: Pagination) {
+  const { page, rowsPerPage } = pagination;
+
+  return data.slice((page - 1) * rowsPerPage, page * rowsPerPage);
+}
+
 const initialState: Table = {
   columns: [
     "rank",
@@ -147,34 +153,16 @@ export function tableReducer(state: Table = initialState, action: Action) {
       };
 
     case TableActions.UPDATE_TABLE_DATA:
-      return {
-        ...state,
-        data: action.payload,
-        pagination: generateInitialPagination(
-          action.payload.length,
-          state.pagination
-        ),
-        tableData: action.payload,
-        sort: initialState.sort,
-      };
-    case TableActions.GET_FIRST_PAGE:
-      return {
-        ...state,
-        pagination: {
-          ...state.pagination,
-          page: 0,
-        },
-      };
-    case TableActions.GET_LAST_PAGE:
-      const lastPage = Math.ceil(
-        state.data.length / state.pagination.rowsPerPage
+      const initialPagination = generateInitialPagination(
+        action.payload.length,
+        state.pagination
       );
       return {
         ...state,
-        pagination: {
-          ...state.pagination,
-          page: lastPage,
-        },
+        data: action.payload,
+        pagination: initialPagination,
+        tableData: generatePaginatedData(action.payload, initialPagination),
+        sort: initialState.sort,
       };
     case TableActions.GET_NEXT_PAGE:
       return {
@@ -186,6 +174,16 @@ export function tableReducer(state: Table = initialState, action: Action) {
               ? state.pagination.page + 1
               : state.pagination.page,
         },
+        tableData: generatePaginatedData(
+          sortTableData(state.data, state.sort),
+          {
+            ...state.pagination,
+            page:
+              state.pagination.page + 1 <= state.pagination.pages
+                ? state.pagination.page + 1
+                : state.pagination.page,
+          }
+        ),
       };
     case TableActions.GET_PREV_PAGE:
       return {
@@ -197,6 +195,16 @@ export function tableReducer(state: Table = initialState, action: Action) {
               ? state.pagination.page - 1
               : state.pagination.page,
         },
+        tableData: generatePaginatedData(
+          sortTableData(state.data, state.sort),
+          {
+            ...state.pagination,
+            page:
+              state.pagination.page - 1 >= 1
+                ? state.pagination.page - 1
+                : state.pagination.page,
+          }
+        ),
       };
     case TableActions.GET_PAGE:
       return {
@@ -205,17 +213,33 @@ export function tableReducer(state: Table = initialState, action: Action) {
           ...state.pagination,
           page: action.payload,
         },
+        tableData: generatePaginatedData(
+          sortTableData(state.data, state.sort),
+          {
+            ...state.pagination,
+            page: action.payload,
+          }
+        ),
       };
 
     case TableActions.UPDATE_ROWS_COUNT:
+      const rowPagination = generateInitialPagination(state.data.length, {
+        ...state.pagination,
+        rowsPerPage: action.payload,
+      });
       return {
         ...state,
-        pagination: generateInitialPagination(state.tableData.length, {
-          ...state.pagination,
-          rowsPerPage: action.payload,
-        }),
+        pagination: rowPagination,
+        tableData: generatePaginatedData(
+          sortTableData(state.data, state.sort),
+          rowPagination
+        ),
       };
     case TableActions.SET_SORT_VALUE:
+      const newPagination = generateInitialPagination(
+        state.data.length,
+        state.pagination
+      );
       const newSort = {
         orderBy: action.payload,
         order:
@@ -224,7 +248,11 @@ export function tableReducer(state: Table = initialState, action: Action) {
       return {
         ...state,
         sort: newSort,
-        tableData: sortTableData(state.data, newSort),
+        pagination: newPagination,
+        tableData: generatePaginatedData(
+          sortTableData(state.data, newSort),
+          newPagination
+        ),
       };
 
     default:

@@ -33,7 +33,7 @@ export class PaginationComponent {
     const activePage = pagination.page;
     const displayedPagesCount = 5;
     let leftOffset = 1;
-    let rightOffset = displayedPagesCount;
+    let rightOffset = Math.min(displayedPagesCount, pages);
 
     if (pages > displayedPagesCount) {
       const pagesOffset = Math.ceil((displayedPagesCount - 1) / 2);

@@ -2,7 +2,7 @@ import { Component, Input } from "@angular/core";
 import { Observable } from "rxjs";
 import { ColumnsArray, ColumnConfig } from "src/app/labels/TableLabels";
 import { TableService } from "src/app/services/table.service";
-import { Column, Sort } from "src/app/state/table/table.model";
+import { Column, Sort, Pagination } from "src/app/state/table/table.model";
 import { TableColumn } from "../../models/Column";
 import { reverse } from "lodash";
 import {
