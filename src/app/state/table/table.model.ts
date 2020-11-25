@@ -22,6 +22,7 @@ export interface Pagination {
   page: number;
   pages: number;
   rowsPerPage: number;
+  totalRows: number;
 }
 
 export interface Sort {

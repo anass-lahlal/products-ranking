@@ -100,6 +100,7 @@ function generateInitialPagination(
     ...oldPagination,
     page: 1,
     pages: Math.ceil(dataLength / oldPagination.rowsPerPage),
+    totalRows: dataLength,
   };
 }
 
@@ -124,6 +125,7 @@ const initialState: Table = {
     page: 0,
     pages: 0,
     rowsPerPage: 20,
+    totalRows: 0,
   },
   sort: {
     orderBy: "rank",
