@@ -71,7 +71,6 @@ export class PaginationComponent {
   }
 
   onRowsCountChange(count: string) {
-    console.log(count);
     this.tableService.updateRowsCount(parseInt(count));
   }
 }
