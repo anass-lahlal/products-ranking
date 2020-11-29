@@ -1,28 +1,67 @@
-import { Component, OnInit } from "@angular/core";
-import * as d3 from "d3";
+import { Component } from "@angular/core";
+import { Chart } from "angular-highcharts";
+import { map } from "lodash";
+
+import { GraphData, GraphRange } from "../../state/graph/graph.model";
+import { GraphService } from "../../services/graph.service";
 
 @Component({
   selector: "app-graph",
   templateUrl: "./graph.component.html",
-  styleUrls: ["./graph.component.css"],
+  styleUrls: ["./graph.component.css", "../../app.component.css"],
 })
-export class GraphComponent implements OnInit {
-  private svg;
-  private margin = 50;
-  private width = 750 - this.margin * 2;
-  private height = 400 - this.margin * 2;
+export class GraphComponent {
+  chart: Chart;
 
-  constructor() {}
+  constructor(private graphService: GraphService) {
+    graphService
+      .getGraphData()
+      .subscribe((state) => this.updateChart(state.data, state.range));
+  }
 
-  ngOnInit(): void {}
-
-  createSvg(): void {
-    this.svg = d3
-      .select("figure#bar")
-      .append("svg")
-      .attr("width", this.width + this.margin * 2)
-      .attr("height", this.height + this.margin * 2)
-      .append("g")
-      .attr("transform", "translate(" + this.margin + "," + this.margin + ")");
+  updateChart(data: GraphData, range: GraphRange): void {
+    this.chart = new Chart({
+      chart: {
+        type: "line",
+      },
+      title: {
+        text: "",
+      },
+      legend: {
+        enabled: false,
+      },
+      credits: {
+        enabled: false,
+      },
+      series: map(data, (value) => ({
+        name: value.name,
+        data: <number[][]>value.points,
+        type: "line",
+      })),
+      yAxis: {
+        reversed: true,
+        min: 1,
+        max: 100,
+        title: {
+          text: "Rank",
+        },
+      },
+      xAxis: {
+        type: "datetime",
+        min: range.min,
+        max: range.max,
+      },
+      tooltip: {
+        xDateFormat: "%m/%d/%Y",
+        className: "graph-tooltip",
+      },
+      plotOptions: {
+        line: {
+          marker: {
+            enabled: false,
+          },
+        },
+      },
+    });
   }
 }

@@ -1,5 +1,6 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
+import { ChartModule } from "angular-highcharts";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -17,7 +18,8 @@ import { tableReducer } from "./state/table/table.reducers";
 import { TableService } from "./services/table.service";
 import { CategoryService } from "./services/category.service";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { PaginationComponent } from './components/pagination/pagination.component';
+import { PaginationComponent } from "./components/pagination/pagination.component";
+import { graphReducer } from "./state/graph/graph.reducers";
 
 @NgModule({
   declarations: [
@@ -37,8 +39,10 @@ import { PaginationComponent } from './components/pagination/pagination.componen
     StoreModule.forRoot({
       category: categoriesReducer,
       table: tableReducer,
+      graph: graphReducer,
     }),
     FontAwesomeModule,
+    ChartModule,
   ],
   providers: [TableService, CategoryService],
   bootstrap: [AppComponent],

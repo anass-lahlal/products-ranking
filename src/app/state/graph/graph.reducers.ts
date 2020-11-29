@@ -1,9 +1,14 @@
 import * as GraphActions from "./graph.actions";
+import { Graph } from "./graph.model";
 
 export type Action = GraphActions.All;
 
-const initialState = {
+const initialState: Graph = {
   data: [],
+  range: {
+    min: 0,
+    max: 0,
+  },
 };
 
 export function graphReducer(state = initialState, action: Action) {
@@ -12,6 +17,7 @@ export function graphReducer(state = initialState, action: Action) {
       return {
         ...state,
         data: action.payload,
+        range: action.range,
       };
     default:
       return state;

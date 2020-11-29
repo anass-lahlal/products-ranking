@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
 import { AppState } from "../models/App";
-import { Graph, Line, Point } from "../state/graph/graph.model";
+import { Graph, GraphData, GraphRange } from "../state/graph/graph.model";
 import * as graphActions from "../state/graph/graph.actions";
 
 @Injectable({
@@ -11,11 +11,11 @@ import * as graphActions from "../state/graph/graph.actions";
 export class GraphService {
   constructor(private store: Store<AppState>) {}
 
-  getGraphData(): Observable<Line[]> {
-    return this.store.select((state) => state.graph.data);
+  getGraphData(): Observable<Graph> {
+    return this.store.select((state) => state.graph);
   }
 
-  updateGraphData(data: Line[]) {
-    this.store.dispatch(new graphActions.updateGraphData(data));
+  updateGraphData(data: GraphData, range: GraphRange) {
+    this.store.dispatch(new graphActions.updateGraphData(data, range));
   }
 }

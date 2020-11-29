@@ -5,6 +5,6 @@ export interface Row {
   presenceRate: number;
   peek: number;
   rankCount: number;
-  currentRank: number;
+  currentRank?: number;
   isNew: boolean;
 }

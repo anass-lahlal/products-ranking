@@ -1,13 +1,18 @@
 export interface Graph {
-  data: Line[];
+  data: GraphData;
+  range: GraphRange;
 }
 
-export interface Line {
+export type GraphData = GraphLineInfo[];
+
+export type Line = number | null[][];
+
+export interface GraphLineInfo {
+  name: string;
+  points: Line;
   id: string;
-  data: Point[][];
 }
-
-export interface Point {
-  date: string;
-  rank: number;
+export interface GraphRange {
+  min: number;
+  max: number;
 }
