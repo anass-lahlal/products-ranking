@@ -15,7 +15,7 @@ export class GraphService {
     return this.store.select((state) => state.graph);
   }
 
-  updateGraphData(data: GraphData, range: GraphRange) {
-    this.store.dispatch(new graphActions.updateGraphData(data, range));
+  updateGraphData(data: GraphData) {
+    this.store.dispatch(new graphActions.updateGraphData(data));
   }
 }

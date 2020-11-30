@@ -163,7 +163,10 @@ export function tableReducer(state: Table = initialState, action: Action) {
         ...state,
         data: action.payload,
         pagination: initialPagination,
-        tableData: generatePaginatedData(action.payload, initialPagination),
+        tableData: generatePaginatedData(
+          sortTableData(action.payload, state.sort),
+          initialPagination
+        ),
         sort: initialState.sort,
       };
     case TableActions.GET_NEXT_PAGE:

@@ -1,0 +1,25 @@
+.filter-input-container {
+  position: relative;
+}
+
+.filter-input {
+  appearance: none;
+  outline: none;
+  border: 1px solid #dfe1ea;
+  color: #344072;
+  font-size: 13px;
+  padding: 12px 15px;
+  height: 39px;
+}
+
+.filter-toggle {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+}
+
+.filter-toggle-icon {
+  font-size: 16px;
+  color: #01b1e6;
+}

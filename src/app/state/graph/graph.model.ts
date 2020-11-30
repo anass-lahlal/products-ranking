@@ -1,6 +1,5 @@
 export interface Graph {
   data: GraphData;
-  range: GraphRange;
 }
 
 export type GraphData = GraphLineInfo[];

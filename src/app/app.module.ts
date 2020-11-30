@@ -1,15 +1,17 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { ChartModule } from "angular-highcharts";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatNativeDateModule } from "@angular/material/core";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { ReactiveFormsModule } from "@angular/forms";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { TableComponent } from "./components/table/table.component";
-import { RowComponent } from "./components/row/row.component";
 import { FilterComponent } from "./components/filter/filter.component";
 import { GraphComponent } from "./components/graph/graph.component";
 import { CategoriesComponent } from "./components/categories/categories.component";
-import { GraphHeaderComponent } from "./components/graph-header/graph-header.component";
 import { CardComponent } from "./components/card/card.component";
 import { StoreModule } from "@ngrx/store";
 
@@ -20,16 +22,16 @@ import { CategoryService } from "./services/category.service";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { PaginationComponent } from "./components/pagination/pagination.component";
 import { graphReducer } from "./state/graph/graph.reducers";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { filterReducer } from "./state/filter/filter.reducers";
 
 @NgModule({
   declarations: [
     AppComponent,
     TableComponent,
-    RowComponent,
     FilterComponent,
     GraphComponent,
     CategoriesComponent,
-    GraphHeaderComponent,
     CardComponent,
     PaginationComponent,
   ],
@@ -40,9 +42,15 @@ import { graphReducer } from "./state/graph/graph.reducers";
       category: categoriesReducer,
       table: tableReducer,
       graph: graphReducer,
+      filter: filterReducer,
     }),
     FontAwesomeModule,
     ChartModule,
+    BrowserAnimationsModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
   ],
   providers: [TableService, CategoryService],
   bootstrap: [AppComponent],

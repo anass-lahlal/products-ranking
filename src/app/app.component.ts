@@ -1,10 +1,13 @@
 import { Component } from "@angular/core";
 import { times, map } from "lodash";
+import { combineLatest } from "rxjs";
 
 import { Product } from "./models/Product";
 import { CategoryService } from "./services/category.service";
+import { FilterService } from "./services/filter.service";
 import { GraphService } from "./services/graph.service";
 import { TableService } from "./services/table.service";
+import { Filter } from "./state/filter/filter.model";
 import { Line } from "./state/graph/graph.model";
 
 @Component({
@@ -16,15 +19,20 @@ export class AppComponent {
   constructor(
     private categoryService: CategoryService,
     private tableService: TableService,
-    private graphService: GraphService
+    private graphService: GraphService,
+    private filterService: FilterService
   ) {
-    categoryService.getCategory().subscribe((data) => this.getData(data));
+    const categorySelector = categoryService.getCategory();
+    const filterSelector = filterService.getDateFilter();
+    combineLatest([categorySelector, filterSelector])
+      .pipe()
+      .subscribe((result) => this.getData(result[0], result[1]));
   }
 
-  getData(category) {
+  getData(category, filter: Filter) {
     let data = this.categoryService.getCategoryData(category).default;
 
-    this.buildData(data);
+    this.buildData(data, filter);
   }
 
   appendPoint(line: Line[], dates: string[], rank: number, date: string) {
@@ -44,7 +52,15 @@ export class AppComponent {
     ];
   }
 
-  buildData(data: Product[]) {
+  appendProperty(array, property, currentDate, date) {
+    let currentDateTime = new Date(currentDate).getTime();
+    let toAppendDateTime = new Date(date).getTime();
+
+    if (toAppendDateTime > currentDateTime) return array;
+    return [...array, property];
+  }
+
+  buildData(data: Product[], filter: Filter) {
     let uniqueProducts = {};
     let graphData = {};
     let transformedData = [];
@@ -52,7 +68,15 @@ export class AppComponent {
     const graphRateThreshold = 20;
     // since data is sorted, we can get the last day's rank from the first product
     //in a real example, we would use current date
-    const currentDay = data[0]?.Date;
+    const isDateAvailable = filter.date !== null;
+    const date = new Date(filter.date);
+    let month = (date.getMonth() + 1).toString();
+    let day = date.getDate().toString();
+    let year = date.getFullYear();
+    if (month.length === 1) month = "0" + month;
+    if (day.length === 1) day = "0" + day;
+    const stringDate = month + "/" + day + "/" + year;
+    const currentDay = isDateAvailable ? stringDate : data[0]?.Date;
 
     //construct object of unique products with their corresponding data
     for (let i = 0; i < data.length; i++) {
@@ -73,19 +97,40 @@ export class AppComponent {
 
         uniqueProducts[product.ASIN] = {
           ...uniqueProducts[product.ASIN],
-          ranks: [...uniqueProducts[product.ASIN].ranks, product.Rank],
-          dates: [...uniqueProducts[product.ASIN].dates, product.Date],
+          ranks: this.appendProperty(
+            uniqueProducts[product.ASIN].ranks,
+            product.Rank,
+            currentDay,
+            product.Date
+          ),
+          dates: this.appendProperty(
+            uniqueProducts[product.ASIN].dates,
+            product.Date,
+            currentDay,
+            product.Date
+          ),
+          isTopRanking:
+            (product.Rank <= graphRateThreshold &&
+              product.Date === currentDay) ||
+            uniqueProducts[product.ASIN].isTopRanking,
         };
       } else {
         let emptyArray = new Array();
         uniqueProducts[product.ASIN] = {
           name: product.Name,
-          ranks: [...emptyArray, product.Rank],
-          dates: [...emptyArray, product.Date],
+          ranks: this.appendProperty(
+            emptyArray,
+            product.Rank,
+            currentDay,
+            product.Date
+          ),
+          dates: this.appendProperty(
+            emptyArray,
+            product.Date,
+            currentDay,
+            product.Date
+          ),
         };
-
-        if (product.Date === currentDay)
-          uniqueProducts[product.ASIN]["currentRank"] = product.Rank;
 
         graphData[product.ASIN] = {
           name: product.Name,
@@ -97,6 +142,9 @@ export class AppComponent {
             product.Rank <= graphRateThreshold && product.Date === currentDay,
         };
       }
+
+      if (product.Date === currentDay)
+        uniqueProducts[product.ASIN]["currentRank"] = product.Rank;
     }
 
     //build row data
@@ -141,10 +189,24 @@ export class AppComponent {
     const max = new Date(data[0].Date).getTime();
     const min = new Date(data[data.length - 1].Date).getTime();
 
+    //set min, max and date for date filter
+    const oneDay = 24 * 60 * 60 * 1000;
+    const dateMin = new Date(min - oneDay);
+    const dateMax = new Date(max - oneDay);
+
+    if (
+      new Date(filter.max).getTime() !== new Date(dateMax).getTime() ||
+      new Date(filter.min).getTime() !== new Date(dateMin).getTime()
+    ) {
+      this.filterService.setFilterDateMaxRange(dateMax);
+      this.filterService.setFilterDateMinRange(dateMin);
+      this.filterService.setFilterDate(dateMax);
+    }
+
     //update store's table data
     this.tableService.updateTableData(transformedData);
 
     //update store's graph data
-    this.graphService.updateGraphData(filteredGraphData, { min, max });
+    this.graphService.updateGraphData(filteredGraphData);
   }
 }
