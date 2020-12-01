@@ -5,6 +5,10 @@
     <app-table class="section"></app-table>
   </div>
   <div class="dashboard-side">
-    <app-filter></app-filter>
+    <app-filter class="section section-row"></app-filter>
+    <app-bar-chart
+      class="section"
+      [data]="[weekNewProducts.length, weekLeftProducts.length]"
+    ></app-bar-chart>
   </div>
 </div>

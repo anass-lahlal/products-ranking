@@ -19,8 +19,6 @@
   width: calc(30% - 10px);
   display: flex;
   flex-direction: column;
-  position: sticky;
-  top: 20px;
 }
 
 .section {

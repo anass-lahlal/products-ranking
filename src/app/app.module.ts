@@ -24,6 +24,7 @@ import { PaginationComponent } from "./components/pagination/pagination.componen
 import { graphReducer } from "./state/graph/graph.reducers";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { filterReducer } from "./state/filter/filter.reducers";
+import { BarChartComponent } from './components/bar-chart/bar-chart.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { filterReducer } from "./state/filter/filter.reducers";
     CategoriesComponent,
     CardComponent,
     PaginationComponent,
+    BarChartComponent,
   ],
   imports: [
     BrowserModule,

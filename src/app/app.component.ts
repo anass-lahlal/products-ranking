@@ -16,6 +16,9 @@ import { Line } from "./state/graph/graph.model";
   styleUrls: ["./app.component.css"],
 })
 export class AppComponent {
+  weekNewProducts: any[];
+  weekLeftProducts: any[];
+
   constructor(
     private categoryService: CategoryService,
     private tableService: TableService,
@@ -31,7 +34,6 @@ export class AppComponent {
 
   getData(category, filter: Filter) {
     let data = this.categoryService.getCategoryData(category).default;
-
     this.buildData(data, filter);
   }
 
@@ -149,6 +151,13 @@ export class AppComponent {
 
     //build row data
     const keys = Object.keys(uniqueProducts);
+    const startOfWeekDateTime = this.getStartOfWeekDateTime(
+      new Date(currentDay)
+    );
+
+    let leftProducts = {};
+    let newProducts = {};
+
     for (let i = 0; i < keys.length; i++) {
       const productData = uniqueProducts[keys[i]];
       const totalRanking = productData.ranks.reduce(
@@ -176,6 +185,29 @@ export class AppComponent {
           ranks: productData.ranks,
           dates: productData.dates,
         });
+
+      //check if it's a new product by checking first time it ranked
+      const firstRecordTime = new Date(
+        productData.dates[productData.dates.length - 1]
+      ).getTime();
+      if (firstRecordTime >= startOfWeekDateTime) {
+        newProducts = {
+          ...newProducts,
+          [keys[i]]: productData,
+        };
+      }
+
+      //check if it's a product that left the top 100 by checking last time it ranked which is not current day
+      const lastRecordTime = new Date(productData.dates[0]).getTime();
+      if (
+        lastRecordTime >= startOfWeekDateTime &&
+        lastRecordTime < new Date(currentDay).getTime()
+      ) {
+        leftProducts = {
+          ...leftProducts,
+          [keys[i]]: productData,
+        };
+      }
     }
 
     //filter graph data
@@ -208,5 +240,25 @@ export class AppComponent {
 
     //update store's graph data
     this.graphService.updateGraphData(filteredGraphData);
+
+    //set value of weekNewProducts variable
+    this.weekNewProducts = map(newProducts, (value: {}, key) => ({
+      ...value,
+      id: key,
+    }));
+
+    //set value of weekLeftProducts variable
+    this.weekLeftProducts = map(leftProducts, (value: {}, key) => ({
+      ...value,
+      id: key,
+    }));
+  }
+
+  getStartOfWeekDateTime(date: Date) {
+    //get monday date for the current week
+    let day = date.getDay();
+    let dayDifference = date.getDate() - day + (day === 0 ? -6 : 1);
+    let mondayDate = new Date(date.setDate(dayDifference));
+    return mondayDate.getTime();
   }
 }
