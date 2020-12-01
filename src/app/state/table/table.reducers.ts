@@ -124,7 +124,7 @@ const initialState: Table = {
   pagination: {
     page: 0,
     pages: 0,
-    rowsPerPage: 20,
+    rowsPerPage: 10,
     totalRows: 0,
   },
   sort: {

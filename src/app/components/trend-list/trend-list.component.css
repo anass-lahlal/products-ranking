@@ -1,0 +1,50 @@
+.trends-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+.trend-item {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  color: #344072;
+  margin-bottom: 12px;
+}
+
+.trend-item:last-child {
+  margin-bottom: 0;
+}
+
+.trend-item-rank {
+  font-size: 18px;
+  font-weight: bold;
+  width: 50px;
+  text-align: center;
+}
+.trend-item-name {
+  width: calc(100% - 80px);
+  font-size: 12px;
+  line-height: 1.2;
+}
+.trend-icon-container {
+  width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.trend-new {
+  font-size: 10px;
+  font-weight: 600;
+  color: #ffaa36;
+}
+
+.trend-icon {
+  font-size: 12px;
+  color: #fe3580;
+}

@@ -1,0 +1,19 @@
+<span class="section-title">{{ title }}</span>
+<div class="trends-container">
+  <div class="trend-item" *ngFor="let product of products">
+    <div class="trend-item-rank">{{ product.rank }}</div>
+    <div class="trend-item-name" title="{{ product.name }}">
+      {{
+        product.name.substring(0, 50) + (product.name.length < 50 ? "" : "...")
+      }}
+    </div>
+    <div class="trend-icon-container">
+      <span class="trend-new" *ngIf="product.isNew; else leftTemplate"
+        >New</span
+      >
+      <ng-template #leftTemplate>
+        <fa-icon class="trend-icon" [icon]="faArrowDown"></fa-icon>
+      </ng-template>
+    </div>
+  </div>
+</div>

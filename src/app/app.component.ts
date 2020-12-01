@@ -18,6 +18,8 @@ import { Line } from "./state/graph/graph.model";
 export class AppComponent {
   weekNewProducts: any[];
   weekLeftProducts: any[];
+  todayNewProducts: any[];
+  todayLeftProducts: any[];
 
   constructor(
     private categoryService: CategoryService,
@@ -223,7 +225,7 @@ export class AppComponent {
 
     //set min, max and date for date filter
     const oneDay = 24 * 60 * 60 * 1000;
-    const dateMin = new Date(min - oneDay);
+    const dateMin = new Date(min);
     const dateMax = new Date(max - oneDay);
 
     if (
@@ -241,17 +243,57 @@ export class AppComponent {
     //update store's graph data
     this.graphService.updateGraphData(filteredGraphData);
 
-    //set value of weekNewProducts variable
-    this.weekNewProducts = map(newProducts, (value: {}, key) => ({
-      ...value,
-      id: key,
-    }));
+    this.weekNewProducts = map(
+      newProducts,
+      (value: { [key: string]: any }, key) => ({
+        ...value,
+        id: key,
+      })
+    );
 
-    //set value of weekLeftProducts variable
-    this.weekLeftProducts = map(leftProducts, (value: {}, key) => ({
-      ...value,
-      id: key,
-    }));
+    this.weekLeftProducts = map(
+      leftProducts,
+      (value: { [key: string]: any }, key) => ({
+        ...value,
+        id: key,
+      })
+    );
+
+    this.todayNewProducts = map(
+      newProducts,
+      (value: { [key: string]: any }, key) => {
+        if (
+          value.dates.length === 1 &&
+          new Date(value.dates[0]).getTime() === new Date(currentDay).getTime()
+        )
+          return {
+            name: value.name,
+            rank: value.ranks[0],
+            isNew: true,
+          };
+
+        return false;
+      }
+    ).filter((val) => !!val);
+
+    const currentDate = new Date(currentDay);
+    this.todayLeftProducts = map(
+      leftProducts,
+      (value: { [key: string]: any }, key) => {
+        if (
+          new Date(value.dates[0]).getTime() ===
+          currentDate.getTime() - oneDay
+        )
+          return {
+            name: value.name,
+            rank: value.ranks[0],
+            isNew: false,
+            dates: value.dates,
+            ranks: value.ranks,
+          };
+        return false;
+      }
+    ).filter((value) => !!value);
   }
 
   getStartOfWeekDateTime(date: Date) {

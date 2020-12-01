@@ -30,8 +30,8 @@ export class BarChartComponent implements OnChanges {
         layout: "vertical",
         align: "right",
         verticalAlign: "top",
-        x: -10,
-        y: 10,
+        x: 0,
+        y: 0,
         floating: true,
         borderWidth: 1,
         backgroundColor: "#FFFFFF",
@@ -65,13 +65,13 @@ export class BarChartComponent implements OnChanges {
       },
       series: [
         {
-          name: "new",
-          data: [this.data[1]],
+          name: "New",
+          data: [this.data[0]],
           type: "column",
         },
         {
-          name: "left",
-          data: [this.data[0]],
+          name: "Unlisted",
+          data: [this.data[1]],
           type: "column",
         },
       ],

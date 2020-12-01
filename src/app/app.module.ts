@@ -12,7 +12,6 @@ import { TableComponent } from "./components/table/table.component";
 import { FilterComponent } from "./components/filter/filter.component";
 import { GraphComponent } from "./components/graph/graph.component";
 import { CategoriesComponent } from "./components/categories/categories.component";
-import { CardComponent } from "./components/card/card.component";
 import { StoreModule } from "@ngrx/store";
 
 import { categoriesReducer } from "./state/categories/categoris.reducers";
@@ -24,7 +23,8 @@ import { PaginationComponent } from "./components/pagination/pagination.componen
 import { graphReducer } from "./state/graph/graph.reducers";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { filterReducer } from "./state/filter/filter.reducers";
-import { BarChartComponent } from './components/bar-chart/bar-chart.component';
+import { BarChartComponent } from "./components/bar-chart/bar-chart.component";
+import { TrendListComponent } from "./components/trend-list/trend-list.component";
 
 @NgModule({
   declarations: [
@@ -33,9 +33,9 @@ import { BarChartComponent } from './components/bar-chart/bar-chart.component';
     FilterComponent,
     GraphComponent,
     CategoriesComponent,
-    CardComponent,
     PaginationComponent,
     BarChartComponent,
+    TrendListComponent,
   ],
   imports: [
     BrowserModule,

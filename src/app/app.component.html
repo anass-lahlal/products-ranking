@@ -10,5 +10,17 @@
       class="section"
       [data]="[weekNewProducts.length, weekLeftProducts.length]"
     ></app-bar-chart>
+    <app-trend-list
+      class="section"
+      title="Today's new products:"
+      [products]="todayNewProducts"
+      *ngIf="todayNewProducts.length > 0"
+    ></app-trend-list>
+    <app-trend-list
+      class="section"
+      title="Today's unlisted products:"
+      [products]="todayLeftProducts"
+      *ngIf="todayLeftProducts.length > 0"
+    ></app-trend-list>
   </div>
 </div>
